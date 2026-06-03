@@ -1,0 +1,694 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		8967F6BC2F3F755500F8B6D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8967F6A42F3F755400F8B6D0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8967F6AB2F3F755400F8B6D0;
+			remoteInfo = ratatoskur;
+		};
+		8967F6C62F3F755500F8B6D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8967F6A42F3F755400F8B6D0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8967F6AB2F3F755400F8B6D0;
+			remoteInfo = ratatoskur;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		8967F6AC2F3F755400F8B6D0 /* ratatoskur.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ratatoskur.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8967F6BB2F3F755500F8B6D0 /* ratatoskurTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ratatoskurTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8967F6C52F3F755500F8B6D0 /* ratatoskurUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ratatoskurUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8967F7932F3F799900F8B6D0 /* Exceptions for "MathCoach" folder in "ratatoskur" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Core/API/APIClient.swift,
+				Core/API/Endpoint.swift,
+				Core/API/MultipartBuilder.swift,
+				Core/Auth/AuthManager.swift,
+				Core/Auth/KeychainStore.swift,
+				Core/Config.swift,
+				Core/Models/AppError.swift,
+				Core/Models/AuthModels.swift,
+				Core/Models/ExamModels.swift,
+				Core/Models/ProblemModels.swift,
+				Core/Models/QueryModels.swift,
+				Core/Storage/ProblemDraftStore.swift,
+				Features/Auth/AuthView.swift,
+				Features/Auth/AuthViewModel.swift,
+				Features/Auth/LoginView.swift,
+				Features/Auth/RegisterView.swift,
+				Features/Notebook/Canvas/PencilCanvasRepresentable.swift,
+				Features/Notebook/Canvas/PencilCanvasView.swift,
+				Features/Notebook/Components/ImagePickers.swift,
+				Features/Notebook/Components/ModePicker.swift,
+				Features/Notebook/Components/QueryResponseCard.swift,
+				Features/Notebook/NotebookView.swift,
+				Features/Notebook/NotebookViewModel.swift,
+				Features/Problems/ExamPrepSheet.swift,
+				Features/Problems/ProblemsOverviewView.swift,
+				Features/Problems/ProblemsOverviewViewModel.swift,
+				MathCoachApp.swift,
+				Resources/profile_avatars/avatar_freya.png,
+				Resources/profile_avatars/avatar_freya.svg,
+				Resources/profile_avatars/avatar_garmur.png,
+				Resources/profile_avatars/avatar_garmur.svg,
+				Resources/profile_avatars/avatar_idun.png,
+				Resources/profile_avatars/avatar_idun.svg,
+				Resources/profile_avatars/avatar_loki.png,
+				Resources/profile_avatars/avatar_loki.svg,
+				Resources/profile_avatars/avatar_odin.png,
+				Resources/profile_avatars/avatar_odin.svg,
+				Resources/profile_avatars/avatar_thor.png,
+				Resources/profile_avatars/avatar_thor.svg,
+				Resources/ratatoskur_logo.svg,
+				Resources/shield.svg,
+				Shared/AppTheme.swift,
+				Shared/AvatarImageView.swift,
+				Shared/LoadingView.swift,
+				Shared/MathTextView.swift,
+				Shared/PrimaryButton.swift,
+				Shared/SVGLogoView.swift,
+			);
+			target = 8967F6AB2F3F755400F8B6D0 /* ratatoskur */;
+		};
+		8967F7942F3F799900F8B6D0 /* Exceptions for "MathCoach" folder in "ratatoskurUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Core/API/APIClient.swift,
+				Core/API/Endpoint.swift,
+				Core/API/MultipartBuilder.swift,
+				Core/Auth/AuthManager.swift,
+				Core/Auth/KeychainStore.swift,
+				Core/Config.swift,
+				Core/Models/AppError.swift,
+				Core/Models/AuthModels.swift,
+				Core/Models/ExamModels.swift,
+				Core/Models/ProblemModels.swift,
+				Core/Models/QueryModels.swift,
+				Core/Storage/ProblemDraftStore.swift,
+				Features/Auth/AuthView.swift,
+				Features/Auth/AuthViewModel.swift,
+				Features/Auth/LoginView.swift,
+				Features/Auth/RegisterView.swift,
+				Features/Notebook/Canvas/PencilCanvasRepresentable.swift,
+				Features/Notebook/Canvas/PencilCanvasView.swift,
+				Features/Notebook/Components/ImagePickers.swift,
+				Features/Notebook/Components/ModePicker.swift,
+				Features/Notebook/Components/QueryResponseCard.swift,
+				Features/Notebook/NotebookView.swift,
+				Features/Notebook/NotebookViewModel.swift,
+				Features/Problems/ExamPrepSheet.swift,
+				Features/Problems/ProblemsOverviewView.swift,
+				Features/Problems/ProblemsOverviewViewModel.swift,
+				MathCoachApp.swift,
+				Resources/profile_avatars/avatar_freya.png,
+				Resources/profile_avatars/avatar_freya.svg,
+				Resources/profile_avatars/avatar_garmur.png,
+				Resources/profile_avatars/avatar_garmur.svg,
+				Resources/profile_avatars/avatar_idun.png,
+				Resources/profile_avatars/avatar_idun.svg,
+				Resources/profile_avatars/avatar_loki.png,
+				Resources/profile_avatars/avatar_loki.svg,
+				Resources/profile_avatars/avatar_odin.png,
+				Resources/profile_avatars/avatar_odin.svg,
+				Resources/profile_avatars/avatar_thor.png,
+				Resources/profile_avatars/avatar_thor.svg,
+				Resources/ratatoskur_logo.svg,
+				Resources/shield.svg,
+				Shared/AppTheme.swift,
+				Shared/AvatarImageView.swift,
+				Shared/LoadingView.swift,
+				Shared/MathTextView.swift,
+				Shared/PrimaryButton.swift,
+				Shared/SVGLogoView.swift,
+			);
+			target = 8967F6C42F3F755500F8B6D0 /* ratatoskurUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		8967F6BE2F3F755500F8B6D0 /* ratatoskurTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ratatoskurTests;
+			sourceTree = "<group>";
+		};
+		8967F6C82F3F755500F8B6D0 /* ratatoskurUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ratatoskurUITests;
+			sourceTree = "<group>";
+		};
+		8967F77B2F3F799900F8B6D0 /* MathCoach */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8967F7932F3F799900F8B6D0 /* Exceptions for "MathCoach" folder in "ratatoskur" target */,
+				8967F7942F3F799900F8B6D0 /* Exceptions for "MathCoach" folder in "ratatoskurUITests" target */,
+			);
+			path = MathCoach;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8967F6A92F3F755400F8B6D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8967F6B82F3F755500F8B6D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8967F6C22F3F755500F8B6D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8967F6A32F3F755400F8B6D0 = {
+			isa = PBXGroup;
+			children = (
+				8967F6BE2F3F755500F8B6D0 /* ratatoskurTests */,
+				8967F6C82F3F755500F8B6D0 /* ratatoskurUITests */,
+				8967F6AD2F3F755400F8B6D0 /* Products */,
+				8967F77B2F3F799900F8B6D0 /* MathCoach */,
+			);
+			sourceTree = "<group>";
+		};
+		8967F6AD2F3F755400F8B6D0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8967F6AC2F3F755400F8B6D0 /* ratatoskur.app */,
+				8967F6BB2F3F755500F8B6D0 /* ratatoskurTests.xctest */,
+				8967F6C52F3F755500F8B6D0 /* ratatoskurUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8967F6AB2F3F755400F8B6D0 /* ratatoskur */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8967F6CF2F3F755500F8B6D0 /* Build configuration list for PBXNativeTarget "ratatoskur" */;
+			buildPhases = (
+				8967F6A82F3F755400F8B6D0 /* Sources */,
+				8967F6A92F3F755400F8B6D0 /* Frameworks */,
+				8967F6AA2F3F755400F8B6D0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ratatoskur;
+			packageProductDependencies = (
+			);
+			productName = ratatoskur;
+			productReference = 8967F6AC2F3F755400F8B6D0 /* ratatoskur.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8967F6BA2F3F755500F8B6D0 /* ratatoskurTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8967F6D22F3F755500F8B6D0 /* Build configuration list for PBXNativeTarget "ratatoskurTests" */;
+			buildPhases = (
+				8967F6B72F3F755500F8B6D0 /* Sources */,
+				8967F6B82F3F755500F8B6D0 /* Frameworks */,
+				8967F6B92F3F755500F8B6D0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8967F6BD2F3F755500F8B6D0 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				8967F6BE2F3F755500F8B6D0 /* ratatoskurTests */,
+			);
+			name = ratatoskurTests;
+			packageProductDependencies = (
+			);
+			productName = ratatoskurTests;
+			productReference = 8967F6BB2F3F755500F8B6D0 /* ratatoskurTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8967F6C42F3F755500F8B6D0 /* ratatoskurUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8967F6D52F3F755500F8B6D0 /* Build configuration list for PBXNativeTarget "ratatoskurUITests" */;
+			buildPhases = (
+				8967F6C12F3F755500F8B6D0 /* Sources */,
+				8967F6C22F3F755500F8B6D0 /* Frameworks */,
+				8967F6C32F3F755500F8B6D0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8967F6C72F3F755500F8B6D0 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				8967F6C82F3F755500F8B6D0 /* ratatoskurUITests */,
+				8967F77B2F3F799900F8B6D0 /* MathCoach */,
+			);
+			name = ratatoskurUITests;
+			packageProductDependencies = (
+			);
+			productName = ratatoskurUITests;
+			productReference = 8967F6C52F3F755500F8B6D0 /* ratatoskurUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8967F6A42F3F755400F8B6D0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					8967F6AB2F3F755400F8B6D0 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					8967F6BA2F3F755500F8B6D0 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 8967F6AB2F3F755400F8B6D0;
+					};
+					8967F6C42F3F755500F8B6D0 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 8967F6AB2F3F755400F8B6D0;
+					};
+				};
+			};
+			buildConfigurationList = 8967F6A72F3F755400F8B6D0 /* Build configuration list for PBXProject "ratatoskur" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8967F6A32F3F755400F8B6D0;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 8967F6AD2F3F755400F8B6D0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8967F6AB2F3F755400F8B6D0 /* ratatoskur */,
+				8967F6BA2F3F755500F8B6D0 /* ratatoskurTests */,
+				8967F6C42F3F755500F8B6D0 /* ratatoskurUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8967F6AA2F3F755400F8B6D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8967F6B92F3F755500F8B6D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8967F6C32F3F755500F8B6D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8967F6A82F3F755400F8B6D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8967F6B72F3F755500F8B6D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8967F6C12F3F755500F8B6D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8967F6BD2F3F755500F8B6D0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8967F6AB2F3F755400F8B6D0 /* ratatoskur */;
+			targetProxy = 8967F6BC2F3F755500F8B6D0 /* PBXContainerItemProxy */;
+		};
+		8967F6C72F3F755500F8B6D0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8967F6AB2F3F755400F8B6D0 /* ratatoskur */;
+			targetProxy = 8967F6C62F3F755500F8B6D0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		8967F6CD2F3F755500F8B6D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		8967F6CE2F3F755500F8B6D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8967F6D02F3F755500F8B6D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Ratatoskur Ã¾arf aÃ°gang aÃ° myndavÃ©l til aÃ° taka mynd af dÃ¦mi.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Ratatoskur Ã¾arf aÃ°gang til aÃ° vista myndir ef Ã¾Ãº velur aÃ° deila eÃ°a vista Ãºtflutningi.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Ratatoskur Ã¾arf aÃ°gang aÃ° myndasafni til aÃ° velja mynd af dÃ¦mi.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johannes.Ratatoskur;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8967F6D12F3F755500F8B6D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Ratatoskur Ã¾arf aÃ°gang aÃ° myndavÃ©l til aÃ° taka mynd af dÃ¦mi.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Ratatoskur Ã¾arf aÃ°gang til aÃ° vista myndir ef Ã¾Ãº velur aÃ° deila eÃ°a vista Ãºtflutningi.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Ratatoskur Ã¾arf aÃ°gang aÃ° myndasafni til aÃ° velja mynd af dÃ¦mi.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johannes.Ratatoskur;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		8967F6D32F3F755500F8B6D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = HI.ratatoskurTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ratatoskur.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ratatoskur";
+			};
+			name = Debug;
+		};
+		8967F6D42F3F755500F8B6D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = HI.ratatoskurTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ratatoskur.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ratatoskur";
+			};
+			name = Release;
+		};
+		8967F6D62F3F755500F8B6D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = HI.ratatoskurUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ratatoskur;
+			};
+			name = Debug;
+		};
+		8967F6D72F3F755500F8B6D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = HI.ratatoskurUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ratatoskur;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8967F6A72F3F755400F8B6D0 /* Build configuration list for PBXProject "ratatoskur" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8967F6CD2F3F755500F8B6D0 /* Debug */,
+				8967F6CE2F3F755500F8B6D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8967F6CF2F3F755500F8B6D0 /* Build configuration list for PBXNativeTarget "ratatoskur" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8967F6D02F3F755500F8B6D0 /* Debug */,
+				8967F6D12F3F755500F8B6D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8967F6D22F3F755500F8B6D0 /* Build configuration list for PBXNativeTarget "ratatoskurTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8967F6D32F3F755500F8B6D0 /* Debug */,
+				8967F6D42F3F755500F8B6D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8967F6D52F3F755500F8B6D0 /* Build configuration list for PBXNativeTarget "ratatoskurUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8967F6D62F3F755500F8B6D0 /* Debug */,
+				8967F6D72F3F755500F8B6D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8967F6A42F3F755400F8B6D0 /* Project object */;
+}
