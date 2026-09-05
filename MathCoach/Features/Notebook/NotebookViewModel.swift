@@ -88,7 +88,8 @@ final class NotebookViewModel: ObservableObject {
     @Published var lastQueryContext: QueryAttemptContext?
     @Published var lastFailedSubmission: FailedSubmissionContext?
 
-    private let draftStore = ProblemDraftStore()
+    @Published private(set) var hasUnscopedLegacyDraft = false
+    private var draftStore: ProblemDraftStore?
     private var autosaveTask: Task<Void, Never>?
     private var observabilityByAttemptId: [String: QueryObservability] = [:]
     private let softSubmissionSizeLimitBytes = 12 * 1024 * 1024
@@ -507,8 +508,23 @@ final class NotebookViewModel: ObservableObject {
         }
     }
 
-    func loadLocalDraft(problemId: String) {
-        guard let draft = draftStore.load(problemId: problemId) else {
+    func restoreNotebook(problemId: String, backendURL: URL, userID: String, assignedImage: UIImage? = nil) {
+        // Bind the notebook to the server/account that opened it, including delayed autosaves.
+        autosaveTask?.cancel()
+        let store = ProblemDraftStore(backendURL: backendURL, userID: userID)
+        draftStore = store
+        hasUnscopedLegacyDraft = store.hasUnscopedLegacyDraft(problemId: problemId)
+        problemImage = nil
+        selectedMode = .hint
+        selectedExpertMode = .off
+        loadLocalDraft(problemId: problemId)
+        if let assignedImage {
+            problemImage = assignedImage
+        }
+    }
+
+    private func loadLocalDraft(problemId: String) {
+        guard let draft = draftStore?.load(problemId: problemId) else {
             pages = [NotebookPage.empty(order: 0)]
             selectedPageIndex = 0
             drawing = pages[0].drawing
@@ -556,16 +572,17 @@ final class NotebookViewModel: ObservableObject {
 
     func scheduleAutosave(problemId: String) {
         autosaveTask?.cancel()
+        guard let draftStore else { return }
         let snapshot = makeDraftSnapshot()
 
-        autosaveTask = Task { [weak self] in
+        autosaveTask = Task {
             try? await Task.sleep(for: .milliseconds(800))
             guard !Task.isCancelled else {
                 return
             }
 
             do {
-                try self?.draftStore.save(problemId: problemId, draft: snapshot)
+                try draftStore.save(problemId: problemId, draft: snapshot)
             } catch {
                 // Keep autosave best-effort and non-blocking for user flow.
             }
@@ -575,6 +592,7 @@ final class NotebookViewModel: ObservableObject {
     func flushAutosaveNow(problemId: String) {
         autosaveTask?.cancel()
         autosaveTask = nil
+        guard let draftStore else { return }
         do {
             try draftStore.save(problemId: problemId, draft: makeDraftSnapshot())
         } catch {

@@ -48,6 +48,11 @@ struct ProblemSummary: Decodable, Identifiable, Hashable {
     let title: String
     let created_at: String
     let updated_at: String
+    var assignment_id: String? = nil
+    var assignment_item_id: String? = nil
+    var assignment_image_url: URL? = nil
+
+    var isAssigned: Bool { assignment_id != nil || assignment_item_id != nil }
 }
 
 struct FolderSummary: Decodable, Identifiable, Hashable {

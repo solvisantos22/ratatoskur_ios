@@ -1,6 +1,10 @@
 import Foundation
 
 enum Endpoint {
+    case studentClasses
+    case studentClassJoin
+    case studentAssignments
+    case studentAssignmentStart(assignmentId: String, itemId: String)
     case register
     case login
     case refresh
@@ -31,6 +35,14 @@ enum Endpoint {
 
     var path: String {
         switch self {
+        case .studentClasses:
+            return "/student/classes"
+        case .studentClassJoin:
+            return "/student/classes/join"
+        case .studentAssignments:
+            return "/student/assignments"
+        case let .studentAssignmentStart(assignmentId, itemId):
+            return "/student/assignments/\(assignmentId)/items/\(itemId)/start"
         case .register:
             return "/auth/register"
         case .login:
@@ -86,13 +98,13 @@ enum Endpoint {
 
     var method: String {
         switch self {
-        case .me, .problems, .folders, .problemAttempts, .analyticsSummary, .analyticsErrorEventTypes, .analyticsErrorEvents, .examPacksList, .examPack, .examSessionResults:
+        case .studentClasses, .studentAssignments, .me, .problems, .folders, .problemAttempts, .analyticsSummary, .analyticsErrorEventTypes, .analyticsErrorEvents, .examPacksList, .examPack, .examSessionResults:
             return "GET"
         case .updateMe, .folder, .problemMove, .problemsMoveBatch, .examSessionAnswer:
             return "PATCH"
         case .problemDelete:
             return "DELETE"
-        case .problem, .query, .register, .login, .refresh, .logout, .attemptFeedback, .foldersCreate, .examPacksCreate, .examPackStart, .examSessionSubmit:
+        case .studentClassJoin, .studentAssignmentStart, .problem, .query, .register, .login, .refresh, .logout, .attemptFeedback, .foldersCreate, .examPacksCreate, .examPackStart, .examSessionSubmit:
             return "POST"
         }
     }

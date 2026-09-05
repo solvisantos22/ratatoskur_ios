@@ -187,6 +187,45 @@ final class APIClient {
         return try await perform(request, decodeAs: QueryResponse.self)
     }
 
+    func listStudentClasses(accessToken: String) async throws -> [StudentClass] {
+        var request = try makeRequest(endpoint: .studentClasses)
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        return try await perform(request, decodeAs: [StudentClass].self)
+    }
+
+    func joinStudentClass(code: String, accessToken: String) async throws -> StudentClass {
+        var request = try makeRequest(endpoint: .studentClassJoin)
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try encode(StudentClassJoinRequest(join_code: code))
+        return try await perform(request, decodeAs: StudentClass.self)
+    }
+
+    func listStudentAssignments(accessToken: String) async throws -> [StudentAssignment] {
+        var request = try makeRequest(endpoint: .studentAssignments)
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        return try await perform(request, decodeAs: [StudentAssignment].self)
+    }
+
+    func startStudentAssignment(assignmentId: String, itemId: String, accessToken: String) async throws -> StudentAssignmentStartResponse {
+        var request = try makeRequest(endpoint: .studentAssignmentStart(assignmentId: assignmentId, itemId: itemId))
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        return try await perform(request, decodeAs: StudentAssignmentStartResponse.self)
+    }
+
+    func invalidateSession() {
+        session.invalidateAndCancel()
+        session.configuration.httpCookieStorage?.cookies?.forEach {
+            session.configuration.httpCookieStorage?.deleteCookie($0)
+        }
+        session.configuration.urlCredentialStorage?.allCredentials.forEach { protectionSpace, credentials in
+            credentials.values.forEach {
+                session.configuration.urlCredentialStorage?.remove($0, for: protectionSpace)
+            }
+        }
+        session.configuration.urlCache?.removeAllCachedResponses()
+    }
+
     func listProblems(accessToken: String) async throws -> [ProblemSummary] {
         var request = try makeRequest(endpoint: .problems)
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")

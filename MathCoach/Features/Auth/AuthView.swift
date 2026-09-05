@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct AuthView: View {
+    @EnvironmentObject private var authManager: AuthManager
+    @State private var showBackendSettings = false
     @State private var authMode: AuthMode = .login
     @Namespace private var authModeSelectionAnimation
 
@@ -28,6 +30,12 @@ struct AuthView: View {
                             .foregroundStyle(AppTheme.Auth.textSecondary)
                     }
 
+                    Button("Tengistillingar", systemImage: "network") {
+                        showBackendSettings = true
+                    }
+                    .font(.footnote)
+                    .disabled(authManager.isSubmitting)
+
                     authModeToggle
 
                     Group {
@@ -44,6 +52,9 @@ struct AuthView: View {
                 .frame(maxWidth: 430, maxHeight: .infinity, alignment: .top)
                 .padding(.horizontal, 22)
                 .padding(.vertical, 28)
+            }
+            .sheet(isPresented: $showBackendSettings) {
+                BackendSettingsView()
             }
             .toolbar(.hidden, for: .navigationBar)
             .tint(AppTheme.Auth.primary)

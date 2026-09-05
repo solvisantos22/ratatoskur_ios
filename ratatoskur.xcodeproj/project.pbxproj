@@ -36,8 +36,18 @@
 				Core/API/APIClient.swift,
 				Core/API/Endpoint.swift,
 				Core/API/MultipartBuilder.swift,
+				Core/Models/StudentClass.swift,
+				Core/Models/StudentClassJoinRequest.swift,
+				Core/Models/StudentAssignment.swift,
+				Core/Models/StudentAssignmentItem.swift,
+				Core/Models/StudentAssignmentStartResponse.swift,
+				Features/Classroom/StudentClassroomModel.swift,
+				Features/Classroom/StudentClassroomView.swift,
+				Features/Classroom/AssignmentImageLoader.swift,
+				Features/Settings/BackendSettingsView.swift,
 				Core/Auth/AuthManager.swift,
 				Core/Auth/KeychainStore.swift,
+				Core/Auth/TokenStore.swift,
 				Core/Config.swift,
 				Core/Models/AppError.swift,
 				Core/Models/AuthModels.swift,
@@ -89,8 +99,18 @@
 				Core/API/APIClient.swift,
 				Core/API/Endpoint.swift,
 				Core/API/MultipartBuilder.swift,
+				Core/Models/StudentClass.swift,
+				Core/Models/StudentClassJoinRequest.swift,
+				Core/Models/StudentAssignment.swift,
+				Core/Models/StudentAssignmentItem.swift,
+				Core/Models/StudentAssignmentStartResponse.swift,
+				Features/Classroom/StudentClassroomModel.swift,
+				Features/Classroom/StudentClassroomView.swift,
+				Features/Classroom/AssignmentImageLoader.swift,
+				Features/Settings/BackendSettingsView.swift,
 				Core/Auth/AuthManager.swift,
 				Core/Auth/KeychainStore.swift,
+				Core/Auth/TokenStore.swift,
 				Core/Config.swift,
 				Core/Models/AppError.swift,
 				Core/Models/AuthModels.swift,
@@ -507,6 +527,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Config/Debug-Info.plist";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Ratatoskur Ã¾arf aÃ°gang aÃ° myndavÃ©l til aÃ° taka mynd af dÃ¦mi.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Ratatoskur Ã¾arf aÃ°gang til aÃ° vista myndir ef Ã¾Ãº velur aÃ° deila eÃ°a vista Ãºtflutningi.";

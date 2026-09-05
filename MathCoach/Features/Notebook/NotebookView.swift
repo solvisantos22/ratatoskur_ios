@@ -23,6 +23,9 @@ private enum NotebookImagePickerSource: String, Identifiable {
 struct NotebookView: View {
     let problem: ProblemSummary
     let showImageOnboardingOnOpen: Bool
+    var assignedStart: StudentAssignmentStartResponse? = nil
+
+    private var isAssigned: Bool { assignedStart != nil || problem.isAssigned }
 
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var authManager: AuthManager
@@ -54,6 +57,9 @@ struct NotebookView: View {
     @State private var isRulerActive = false
     @State private var paperStyle: PaperStyle = .squared
     @State private var isDraftHydrated = false
+    @State private var isAssignedImageReady = false
+    @State private var isLoadingAssignedImage = false
+    @State private var assignedImageError: String?
     @State private var suppressStartupEmptyDrawingUntil: Date = .distantPast
     @State private var problemImageHeightOverride: CGFloat?
 
@@ -62,8 +68,14 @@ struct NotebookView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     problemImageSection
+                    if viewModel.hasUnscopedLegacyDraft {
+                        Label("Eldri drög að þessu dæmi eru enn á tækinu. Þau eru ekki opnuð sjálfkrafa þar sem ekki er vitað hvaða aðgangi eða þjóni þau tilheyra.", systemImage: "doc.badge.ellipsis")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
                     canvasSection
                     actionsAndResponseSection
+                        .disabled(!isDraftHydrated || (isAssigned && !isAssignedImageReady))
                     attemptsSection
                 }
                 .padding(16)
@@ -195,13 +207,18 @@ struct NotebookView: View {
             )
         }
         .task {
-            isDraftHydrated = false
+            guard !isDraftHydrated else { return }
             suppressStartupEmptyDrawingUntil = Date().addingTimeInterval(1.0)
             loadPaperStylePreference()
-            viewModel.loadLocalDraft(problemId: problem.id)
-            showImageOnboarding = showImageOnboardingOnOpen && viewModel.problemImage == nil
+            guard let userID = authManager.currentUser?.id, userID == problem.user_id else {
+                viewModel.errorMessage = "Skráðu þig inn aftur til að opna stílabókina."
+                return
+            }
+            viewModel.restoreNotebook(problemId: problem.id, backendURL: AppConfig.baseURL, userID: userID)
+            showImageOnboarding = !isAssigned && showImageOnboardingOnOpen && viewModel.problemImage == nil
             try? await Task.sleep(for: .milliseconds(200))
             isDraftHydrated = true
+            if isAssigned { await loadAssignedImage(initialStart: assignedStart) }
             await viewModel.loadAttempts(authManager: authManager, problemId: problem.id)
         }
         .onReceive(viewModel.$drawing.dropFirst()) { _ in
@@ -250,12 +267,43 @@ struct NotebookView: View {
     }
 
     private func persistAndSaveCanvasState() {
+        guard isDraftHydrated else { return }
         if let liveDrawing = canvasController.currentDrawing(),
            liveDrawing.dataRepresentation() != viewModel.drawing.dataRepresentation() {
             viewModel.drawing = liveDrawing
         }
         viewModel.syncCurrentDrawingToPages()
         viewModel.flushAutosaveNow(problemId: problem.id)
+    }
+
+    private func loadAssignedImage(initialStart: StudentAssignmentStartResponse? = nil) async {
+        guard !isLoadingAssignedImage else { return }
+        isLoadingAssignedImage = true
+        isAssignedImageReady = false
+        assignedImageError = nil
+        defer { isLoadingAssignedImage = false }
+        do {
+            let start: StudentAssignmentStartResponse
+            if let initialStart {
+                start = initialStart
+            } else if let assignmentID = problem.assignment_id, let itemID = problem.assignment_item_id {
+                start = try await authManager.startStudentAssignment(assignmentId: assignmentID, itemId: itemID)
+            } else {
+                throw AppError.message("Ekki tókst að finna bekkjarverkefnið. Opnaðu það aftur úr Bekkurinn minn.")
+            }
+            guard start.problem.id == problem.id else {
+                throw AppError.message("Dæmið hefur breyst. Opnaðu það aftur úr Bekkurinn minn.")
+            }
+            let image = try await AssignmentImageLoader.load(url: start.image_url)
+            try Task.checkCancellation()
+            viewModel.setProblemImage(image)
+            viewModel.flushAutosaveNow(problemId: problem.id)
+            isAssignedImageReady = true
+        } catch is CancellationError {
+            return
+        } catch {
+            assignedImageError = error.localizedDescription
+        }
     }
 
     private var paperStylePreferenceKey: String {
@@ -361,30 +409,48 @@ struct NotebookView: View {
                     .background(AppTheme.Auth.surfaceMuted)
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             } else {
-                Text("Bættu við upprunalegu myndinni af dæminu áður en þú sendir fyrirspurn.")
+                Text(isAssigned ? "Mynd kennarans birtist hér þegar tenging næst." : "Bættu við upprunalegu myndinni af dæminu áður en þú sendir fyrirspurn.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            Menu {
-                Button("Myndasafn") {
-                    activeImagePickerSource = .photoLibrary
+            if isAssigned {
+                Label("Bekkjardæmi · Mynd kennarans", systemImage: "person.3.fill")
+                    .font(.subheadline.weight(.semibold))
+                Text("Kennarinn sér handskriftina, tilraunirnar og vísbendingarnar sem þú sendir fyrir þetta dæmi. Persónulegar stílabækur eru ekki birtar kennara.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                if isLoadingAssignedImage {
+                    ProgressView("Sæki mynd kennarans...")
                 }
-
-                if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                    Button("Myndavél") {
-                        activeImagePickerSource = .camera
+                if let assignedImageError {
+                    Text(assignedImageError).font(.footnote).foregroundStyle(.red)
+                    Button("Sækja mynd aftur") {
+                        Task { await loadAssignedImage() }
                     }
+                    .disabled(isLoadingAssignedImage)
                 }
-            } label: {
-                imagePickerPrimaryLabel(
-                    title: viewModel.problemImage == nil ? "Bæta við mynd af dæmi" : "Skipta út mynd af dæmi"
-                )
+            } else {
+                Menu {
+                    Button("Myndasafn") {
+                        activeImagePickerSource = .photoLibrary
+                    }
+
+                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                        Button("Myndavél") {
+                            activeImagePickerSource = .camera
+                        }
+                    }
+                } label: {
+                    imagePickerPrimaryLabel(
+                        title: viewModel.problemImage == nil ? "Bæta við mynd af dæmi" : "Skipta út mynd af dæmi"
+                    )
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(viewModel.problemImage == nil ? "Bæta við mynd af dæmi" : "Skipta út mynd af dæmi")
+                .accessibilityHint("Veldu mynd úr myndasafni eða myndavél af upprunalega dæminu.")
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel(viewModel.problemImage == nil ? "Bæta við mynd af dæmi" : "Skipta út mynd af dæmi")
-            .accessibilityHint("Veldu mynd úr myndasafni eða myndavél af upprunalega dæminu.")
         }
         .padding(14)
         .background(AppTheme.Auth.surface)

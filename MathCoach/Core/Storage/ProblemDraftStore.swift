@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 import PencilKit
 import UIKit
 
@@ -40,7 +41,39 @@ final class ProblemDraftStore {
     }
 
     private let fileManager = FileManager.default
-    private let baseFolderName = "ProblemDrafts"
+    private let baseDirectory: URL
+    private let scopedDirectory: URL
+
+    init(backendURL: URL, userID: String, baseDirectory: URL? = nil) {
+        let root = baseDirectory ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("ProblemDrafts", isDirectory: true)
+        self.baseDirectory = root
+        // Keep API prefixes in the identity: one host can serve multiple independent backends.
+        var components = URLComponents(url: backendURL, resolvingAgainstBaseURL: false)
+        let normalizedScheme = components?.scheme?.lowercased()
+        let normalizedHost = components?.host?.lowercased()
+        components?.scheme = normalizedScheme
+        components?.host = normalizedHost
+        if (components?.scheme == "https" && components?.port == 443) ||
+            (components?.scheme == "http" && components?.port == 80) {
+            components?.port = nil
+        }
+        if let path = components?.path, !path.hasSuffix("/") { components?.path += "/" }
+        let backendKey = Self.storageKey(components?.url?.absoluteString ?? backendURL.absoluteString)
+        self.scopedDirectory = root
+            .appendingPathComponent("Scoped", isDirectory: true)
+            .appendingPathComponent(backendKey, isDirectory: true)
+            .appendingPathComponent(Self.storageKey(userID), isDirectory: true)
+    }
+
+    func hasUnscopedLegacyDraft(problemId: String) -> Bool {
+        let legacy = baseDirectory.appendingPathComponent(problemId, isDirectory: true)
+        return fileManager.fileExists(atPath: legacy.appendingPathComponent("metadata.json").path)
+    }
+
+    private static func storageKey(_ value: String) -> String {
+        SHA256.hash(data: Data(value.utf8)).map { String(format: "%02x", $0) }.joined()
+    }
 
     func load(problemId: String) -> ProblemDraft? {
         let folder = folderURL(problemId: problemId)
@@ -177,10 +210,7 @@ final class ProblemDraftStore {
     }
 
     private func folderURL(problemId: String) -> URL {
-        let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        return appSupport
-            .appendingPathComponent(baseFolderName, isDirectory: true)
-            .appendingPathComponent(problemId, isDirectory: true)
+        scopedDirectory.appendingPathComponent(problemId, isDirectory: true)
     }
 
     private func pagesFolderURL(folder: URL) -> URL {

@@ -9,6 +9,7 @@ struct ProblemsOverviewView: View {
     @AppStorage("profile.avatar.id") private var selectedAvatarID: String = ProfileAvatarOption.defaultID
 
     @State private var navigationPath: [ProblemNavigationRoute] = []
+    @State private var showClassroom = false
     @State private var showCreateSheet = false
     @State private var showCreateFolderSheet = false
     @State private var showProfileSheet = false
@@ -39,6 +40,16 @@ struct ProblemsOverviewView: View {
                         VStack(alignment: .leading, spacing: 18) {
                             brandHeader
                             greetingSection
+                            Button {
+                                showClassroom = true
+                            } label: {
+                                Label("Bekkurinn minn", systemImage: "person.3.fill")
+                                    .font(.headline)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(16)
+                            }
+                            .buttonStyle(.bordered)
+                            .keyboardShortcut("k", modifiers: [.command, .shift])
                             statsSection
                             comingSoonSection
                             workspaceSection
@@ -56,6 +67,9 @@ struct ProblemsOverviewView: View {
                 )
             }
             .toolbar(.hidden, for: .navigationBar)
+            .fullScreenCover(isPresented: $showClassroom) {
+                StudentClassroomView()
+            }
             .sheet(isPresented: $showCreateSheet) {
                 createProblemSheet
             }

@@ -75,8 +75,6 @@ final class ProblemsOverviewViewModel: ObservableObject {
     @Published var userStats: UserStatsSummary?
     @Published var errorEventTypeSummary: ErrorEventTypeSummaryResponse?
 
-    private let draftStore = ProblemDraftStore()
-
     func loadProblems(authManager: AuthManager) async {
         isLoading = true
         errorMessage = nil
@@ -198,6 +196,8 @@ final class ProblemsOverviewViewModel: ObservableObject {
         defer { isDeletingProblem = false }
 
         do {
+            guard let userID = authManager.currentUser?.id else { throw AppError.unauthorized }
+            let draftStore = ProblemDraftStore(backendURL: AppConfig.baseURL, userID: userID)
             _ = try await authManager.deleteProblem(problemId: problemId)
             draftStore.delete(problemId: problemId)
             await loadProblems(authManager: authManager)
@@ -352,6 +352,8 @@ final class ProblemsOverviewViewModel: ObservableObject {
         studentName: String,
         authManager: AuthManager
     ) async throws -> SubmissionExportResult {
+        guard let userID = authManager.currentUser?.id else { throw AppError.unauthorized }
+        let draftStore = ProblemDraftStore(backendURL: AppConfig.baseURL, userID: userID)
         let normalizedTitle = submissionTitle.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !normalizedTitle.isEmpty else {
             throw SubmissionExportError.missingTitle

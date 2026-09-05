@@ -13,8 +13,8 @@ final class AuthManager: ObservableObject {
     @Published var errorMessage: String?
     @Published var isSubmitting: Bool = false
 
-    private let api: APIClient
-    private let keychain: KeychainStore
+    private var api: APIClient
+    private let keychain: any TokenStore
     private let accessTokenKey = "mathcoach.access_token"
     private var accessToken: String?
     let sessionId: String = UUID().uuidString
@@ -26,7 +26,7 @@ final class AuthManager: ObservableObject {
         return me
     }
 
-    init(api: APIClient, keychain: KeychainStore) {
+    init(api: APIClient, keychain: any TokenStore) {
         self.api = api
         self.keychain = keychain
     }
@@ -155,6 +155,48 @@ final class AuthManager: ObservableObject {
                 accessToken: refreshedToken
             )
         }
+    }
+
+    func listStudentClasses() async throws -> [StudentClass] {
+        try await withStudentToken { try await self.api.listStudentClasses(accessToken: $0) }
+    }
+
+    func joinStudentClass(code: String) async throws -> StudentClass {
+        try await withStudentToken { try await self.api.joinStudentClass(code: code, accessToken: $0) }
+    }
+
+    func listStudentAssignments() async throws -> [StudentAssignment] {
+        try await withStudentToken { try await self.api.listStudentAssignments(accessToken: $0) }
+    }
+
+    func startStudentAssignment(assignmentId: String, itemId: String) async throws -> StudentAssignmentStartResponse {
+        try await withStudentToken {
+            try await self.api.startStudentAssignment(assignmentId: assignmentId, itemId: itemId, accessToken: $0)
+        }
+    }
+
+    private func withStudentToken<T>(_ action: (String) async throws -> T) async throws -> T {
+        let token = try await ensureAccessToken()
+        do {
+            return try await action(token)
+        } catch AppError.unauthorized {
+            return try await action(try await refreshAccessToken())
+        }
+    }
+
+    func changeBackend(to input: String) throws {
+        guard case .unauthenticated = status, !isSubmitting else {
+            throw AppError.message("Skráðu þig út áður en þú breytir tengingu.")
+        }
+        let url = try AppConfig.validatedBackendURL(input)
+        guard url != AppConfig.baseURL else { return }
+        // The settings screen is available only when no authentication action is running.
+        // Invalidate the old session before storing the new address or creating its client.
+        api.invalidateSession()
+        clearSession()
+        errorMessage = nil
+        UserDefaults.standard.set(url.absoluteString, forKey: AppConfig.backendOverrideKey)
+        api = APIClient(baseURL: url)
     }
 
     func listProblems() async throws -> [ProblemSummary] {

@@ -1,7 +1,7 @@
 import Foundation
 import Security
 
-struct KeychainStore {
+struct KeychainStore: TokenStore {
     func set(_ value: String, for key: String) {
         let data = Data(value.utf8)
         let query: [String: Any] = [
