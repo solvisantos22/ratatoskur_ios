@@ -6,9 +6,10 @@ struct StudentClassroomView: View {
     @State private var model = StudentClassroomModel()
     @State private var showJoin = false
     @State private var openedExercise: StudentAssignmentStartResponse?
+    @State private var columnVisibility: NavigationSplitViewVisibility = .automatic
 
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $columnVisibility) {
             List(selection: $model.selectedClassID) {
                 Section("Bekkir") {
                     ForEach(model.classes) { classroom in
@@ -42,7 +43,14 @@ struct StudentClassroomView: View {
                     .navigationTitle(model.selectedClassName)
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationDestination(item: $openedExercise) { opened in
-                        NotebookView(problem: opened.problem, showImageOnboardingOnOpen: false, assignedStart: opened)
+                        NotebookView(
+                            problem: opened.problem,
+                            showImageOnboardingOnOpen: false,
+                            assignedStart: opened,
+                            onShowClassroom: {
+                                withAnimation { columnVisibility = .all }
+                            }
+                        )
                     }
                     .toolbar {
                         ToolbarItem(placement: .primaryAction) {

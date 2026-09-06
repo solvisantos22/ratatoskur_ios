@@ -24,6 +24,7 @@ struct NotebookView: View {
     let problem: ProblemSummary
     let showImageOnboardingOnOpen: Bool
     var assignedStart: StudentAssignmentStartResponse? = nil
+    var onShowClassroom: (() -> Void)? = nil
 
     private var isAssigned: Bool { assignedStart != nil || problem.isAssigned }
 
@@ -1081,6 +1082,19 @@ struct NotebookView: View {
     ) -> some View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
+                if horizontalSizeClass == .regular, let onShowClassroom {
+                    Button("Bekkir", systemImage: "sidebar.left", action: onShowClassroom)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 12)
+                        .frame(minHeight: 44)
+                        .background(Color.white.opacity(0.14), in: Capsule())
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Sýna bekki")
+                        .help("Opnar bekkjalistann án þess að loka dæminu.")
+                        .keyboardShortcut("s", modifiers: [.command, .control])
+                }
+
                 Button(action: onBack) {
                     HStack(spacing: 6) {
                         Image(systemName: "chevron.left")
