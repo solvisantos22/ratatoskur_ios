@@ -40,6 +40,10 @@ struct ClassroomAssignmentView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                             Text(item.problem_id == nil ? "Opna vinnubók" : "Halda áfram í vinnubók")
                                 .font(.subheadline).foregroundStyle(AppTheme.Auth.primary)
+                            if item.last_submitted_at != nil {
+                                Label("Skilað til kennara", systemImage: "checkmark.circle")
+                                    .font(.caption).foregroundStyle(AppTheme.Auth.textSecondary)
+                            }
                         }
                         Spacer(minLength: 0)
                         if openingItemID == item.id {
@@ -53,11 +57,11 @@ struct ClassroomAssignmentView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(openingItemID != nil)
-                .accessibilityLabel("\(item.title.isEmpty ? "Dæmi \(item.position + 1)" : item.title), \(item.problem_id == nil ? "Opna vinnubók" : "Halda áfram")")
+                .accessibilityLabel("\(item.title.isEmpty ? "Dæmi \(item.position + 1)" : item.title), \(item.problem_id == nil ? "Opna vinnubók" : "Halda áfram")\(item.last_submitted_at == nil ? "" : ", skilað til kennara")")
                 .hoverEffect(.highlight)
             }
 
-            Label("Kennarinn sér handskrift og svör eftir að þú sendir fyrirspurn. Að opna dæmi merkir ekki að því sé lokið.", systemImage: "person.crop.circle")
+            Label("Kennarinn sér handskrift eftir að þú skilar til kennara eða sendir AI-fyrirspurn. Skil merkja ekki að lausnin sé rétt.", systemImage: "person.crop.circle")
                 .font(.footnote).foregroundStyle(AppTheme.Auth.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }

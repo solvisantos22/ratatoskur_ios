@@ -213,6 +213,22 @@ final class APIClient {
         return try await perform(request, decodeAs: StudentAssignmentStartResponse.self)
     }
 
+    func submitClassroomWork(assignmentId: String, itemId: String, problemId: String, submissionId: String, pages: [Data], accessToken: String) async throws -> ClassroomSubmissionReceipt {
+        let builder = MultipartBuilder()
+        var parts = [
+            MultipartPart(name: "problem_id", filename: nil, contentType: nil, data: Data(problemId.utf8)),
+            MultipartPart(name: "submission_id", filename: nil, contentType: nil, data: Data(submissionId.utf8))
+        ]
+        parts += pages.enumerated().map { index, page in
+            MultipartPart(name: "solution_pages", filename: "page_\(index + 1).png", contentType: "image/png", data: page)
+        }
+        var request = try makeRequest(endpoint: .studentAssignmentSubmission(assignmentId: assignmentId, itemId: itemId))
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("multipart/form-data; boundary=\(builder.boundary)", forHTTPHeaderField: "Content-Type")
+        request.httpBody = builder.build(parts: parts)
+        return try await perform(request, decodeAs: ClassroomSubmissionReceipt.self)
+    }
+
     func invalidateSession() {
         session.invalidateAndCancel()
         session.configuration.httpCookieStorage?.cookies?.forEach {

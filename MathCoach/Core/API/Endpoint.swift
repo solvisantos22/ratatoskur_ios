@@ -5,6 +5,7 @@ enum Endpoint {
     case studentClassJoin
     case studentAssignments
     case studentAssignmentStart(assignmentId: String, itemId: String)
+    case studentAssignmentSubmission(assignmentId: String, itemId: String)
     case register
     case login
     case refresh
@@ -43,6 +44,8 @@ enum Endpoint {
             return "/student/assignments"
         case let .studentAssignmentStart(assignmentId, itemId):
             return "/student/assignments/\(assignmentId)/items/\(itemId)/start"
+        case let .studentAssignmentSubmission(assignmentId, itemId):
+            return "/student/assignments/\(assignmentId)/items/\(itemId)/submissions"
         case .register:
             return "/auth/register"
         case .login:
@@ -104,7 +107,7 @@ enum Endpoint {
             return "PATCH"
         case .problemDelete:
             return "DELETE"
-        case .studentClassJoin, .studentAssignmentStart, .problem, .query, .register, .login, .refresh, .logout, .attemptFeedback, .foldersCreate, .examPacksCreate, .examPackStart, .examSessionSubmit:
+        case .studentClassJoin, .studentAssignmentStart, .studentAssignmentSubmission, .problem, .query, .register, .login, .refresh, .logout, .attemptFeedback, .foldersCreate, .examPacksCreate, .examPackStart, .examSessionSubmit:
             return "POST"
         }
     }

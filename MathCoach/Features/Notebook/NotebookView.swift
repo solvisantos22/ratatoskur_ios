@@ -47,6 +47,10 @@ struct NotebookView: View {
     @State private var showImageOnboarding = false
     @State private var pendingSubmissionAction: SubmissionAction?
     @State private var submissionTask: Task<Void, Never>?
+    @State private var classroomSubmission = ClassroomSubmissionModel()
+    @State private var classroomSubmissionTask: Task<Void, Never>?
+    @State private var showClassroomSubmissionConfirmation = false
+    @State private var classroomSubmissionPages: [Data] = []
     @State private var actionInfoMode: QueryMode?
     @State private var sideBySideCardHeight: CGFloat = 0
     @StateObject private var canvasController = PencilCanvasController()
@@ -77,8 +81,17 @@ struct NotebookView: View {
                             .foregroundStyle(.secondary)
                     }
                     canvasSection
+                    if isAssigned {
+                        ClassroomSubmissionCard(model: classroomSubmission, isReady: isDraftHydrated && isAssignedImageReady && !viewModel.isSubmitting, onSubmit: prepareClassroomSubmission)
+                            .confirmationDialog("Skila til kennara?", isPresented: $showClassroomSubmissionConfirmation, titleVisibility: .visible) {
+                                Button("Skila til kennara") { submitClassroomSnapshot() }
+                                Button("Hætta við", role: .cancel) { classroomSubmissionPages = [] }
+                            } message: {
+                                Text("Sendir afrit af öllum blöðum þessa dæmis til kennarans. Þú getur haldið áfram að skrifa og skilað aftur síðar.")
+                            }
+                    }
                     actionsAndResponseSection
-                        .disabled(!isDraftHydrated || (isAssigned && !isAssignedImageReady))
+                        .disabled(!isDraftHydrated || classroomSubmission.isSubmitting || (isAssigned && !isAssignedImageReady))
                     attemptsSection
                 }
                 .padding(16)
@@ -275,7 +288,33 @@ struct NotebookView: View {
         }
         .onDisappear {
             submissionTask?.cancel()
+            classroomSubmissionTask?.cancel()
             persistAndSaveCanvasState()
+        }
+    }
+
+    private func prepareClassroomSubmission() {
+        guard isAssigned, isDraftHydrated, isAssignedImageReady,
+              !classroomSubmission.isSubmitting, !viewModel.isSubmitting else { return }
+        persistAndSaveCanvasState()
+        do {
+            classroomSubmissionPages = try viewModel.makeClassroomSubmissionPages()
+            classroomSubmission.errorMessage = nil
+            showClassroomSubmissionConfirmation = true
+        } catch {
+            classroomSubmission.errorMessage = error.localizedDescription
+        }
+    }
+
+    private func submitClassroomSnapshot() {
+        guard let assignmentID = problem.assignment_id, let itemID = problem.assignment_item_id,
+              authManager.currentUser?.id == problem.user_id, !classroomSubmissionPages.isEmpty else { return }
+        let pages = classroomSubmissionPages
+        classroomSubmissionPages = []
+        classroomSubmissionTask = Task {
+            await classroomSubmission.submit(pages: pages) { id, capturedPages in
+                try await authManager.submitClassroomWork(assignmentId: assignmentID, itemId: itemID, problemId: problem.id, submissionId: id, pages: capturedPages)
+            }
         }
     }
 
@@ -302,12 +341,13 @@ struct NotebookView: View {
             } else if let assignmentID = problem.assignment_id, let itemID = problem.assignment_item_id {
                 start = try await authManager.startStudentAssignment(assignmentId: assignmentID, itemId: itemID)
             } else {
-                throw AppError.message("Ekki tókst að finna bekkjarverkefnið. Opnaðu það aftur úr Bekkurinn minn.")
+                throw AppError.message("Ekki tókst að finna bekkjarverkefnið. Opnaðu það aftur úr Mínir bekkir.")
             }
             guard start.problem.id == problem.id else {
-                throw AppError.message("Dæmið hefur breyst. Opnaðu það aftur úr Bekkurinn minn.")
+                throw AppError.message("Dæmið hefur breyst. Opnaðu það aftur úr Mínir bekkir.")
             }
             try Task.checkCancellation()
+            classroomSubmission.restoreReceipt(start.last_submission)
             viewModel.applyAssignmentPolicy(start.problem.assignment_allow_reveal, problemId: problem.id)
             let image = try await AssignmentImageLoader.load(url: start.image_url)
             try Task.checkCancellation()
@@ -885,7 +925,7 @@ struct NotebookView: View {
 
     private var responseSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Svar kennara")
+            Text("Svar Ratatosks")
                 .font(.headline)
 
             if let response = viewModel.response {

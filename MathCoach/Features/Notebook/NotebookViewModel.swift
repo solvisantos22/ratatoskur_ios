@@ -656,6 +656,12 @@ final class NotebookViewModel: ObservableObject {
         )
     }
 
+    func makeClassroomSubmissionPages() throws -> [Data] {
+        syncCurrentDrawingToPages()
+        guard pages.contains(where: { !$0.drawing.bounds.isEmpty }) else { throw AppError.emptyDrawing }
+        return try encodeSolutionPageImages(renderSolutionPagesForSubmission())
+    }
+
     private func renderSolutionPagesForSubmission() throws -> [UIImage] {
         let sortedPages = pages.sorted { lhs, rhs in lhs.order < rhs.order }
         let hasInk = sortedPages.contains { !$0.drawing.bounds.isEmpty }

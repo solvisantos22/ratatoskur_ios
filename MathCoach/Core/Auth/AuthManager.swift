@@ -175,6 +175,12 @@ final class AuthManager: ObservableObject {
         }
     }
 
+    func submitClassroomWork(assignmentId: String, itemId: String, problemId: String, submissionId: String, pages: [Data]) async throws -> ClassroomSubmissionReceipt {
+        try await withStudentToken {
+            try await self.api.submitClassroomWork(assignmentId: assignmentId, itemId: itemId, problemId: problemId, submissionId: submissionId, pages: pages, accessToken: $0)
+        }
+    }
+
     private func withStudentToken<T>(_ action: (String) async throws -> T) async throws -> T {
         let token = try await ensureAccessToken()
         do {
