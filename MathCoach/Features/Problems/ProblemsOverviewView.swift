@@ -43,7 +43,7 @@ struct ProblemsOverviewView: View {
                             Button {
                                 showClassroom = true
                             } label: {
-                                Label("Bekkurinn minn", systemImage: "person.3.fill")
+                                Label("Mínir bekkir", systemImage: "person.3.fill")
                                     .font(.headline)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(16)

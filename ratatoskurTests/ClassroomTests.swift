@@ -5,6 +5,15 @@ import UIKit
 
 @MainActor
 final class ClassroomTests: XCTestCase {
+    func testClassTeacherNameIsOptionalForOlderBackends() throws {
+        for (extra, expected) in [("", nil), (",\"teacher_name\":null", nil), (",\"teacher_name\":\"Sýnikennari\"", "Sýnikennari")] as [(String, String?)] {
+            let data = Data("{\"id\":\"class\",\"name\":\"Stærðfræði\",\"join_code\":\"CODE\",\"student_count\":2\(extra)}".utf8)
+            let classroom = try JSONDecoder().decode(StudentClass.self, from: data)
+            XCTAssertEqual(classroom.teacher_name, expected)
+            XCTAssertEqual(classroom.name, "Stærðfræði")
+        }
+    }
+
     func testAssignmentsDecodeUnstartedAndStartedItems() throws {
         let data = Data("""
         [{"id":"set-1","class_id":"class-1","class_name":"8. bekkur","title":"Brot","item_count":2,"created_at":"2026-09-05T12:00:00Z","items":[{"id":"item-1","title":"Fyrsta dæmi","position":0,"image_url":"https://example.com/1?token=abc","problem_id":null},{"id":"item-2","title":"Annað dæmi","position":1,"image_url":"https://example.com/2","problem_id":"problem-2"}]}]

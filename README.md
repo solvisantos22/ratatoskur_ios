@@ -143,7 +143,7 @@ Implementation reference: `MathCoach/Core/API/Endpoint.swift`.
 
 In the iPad simulator, click and drag with the mouse or trackpad to write on the
 canvas. Simulator builds accept touch input for walkthroughs without an Apple
-Pencil. Physical devices retain Pencil-only drawing. Open **Bekkurinn minn** to
+Pencil. Physical devices retain Pencil-only drawing. Open **Mínir bekkir** to
 join a class and try an assigned exercise; the local backend must be running.
 
 CLI build example:
@@ -166,7 +166,7 @@ xcodebuild -project ratatoskur.xcodeproj -scheme ratatoskur -destination 'generi
 
 ## Classroom assignments
 
-Open **Bekkurinn minn** on the overview and choose **Ganga í bekk**. Enter the code supplied by the teacher, select the class, then open an exercise in an assigned set. The existing SwiftUI/PencilKit notebook opens with the teacher's original image. Sending a hint/check/reveal request uses the ordinary `/query` flow and links that attempt to the teacher's assignment.
+Open **Mínir bekkir** on the overview and choose **Ganga í bekk**. Enter the code supplied by the teacher. The flow is **Mínir bekkir → class home → assignment set → exercise → notebook**. The class home shows its teacher when that name is available and cards for its assignment sets; opening a set lists the exercises. Selecting a class in the sidebar always returns to that class's home, including when another notebook was open. Pending opens from the old location are ignored. **Bekkir** restores the sidebar and **Verkefnasett** returns from the notebook to its exercise list. The class, assignment and join screens reuse the existing cream/brown AppTheme, logo and serif headings. The existing SwiftUI/PencilKit notebook opens with the teacher's original image. Sending a hint/check/reveal request uses the ordinary `/query` flow and links that attempt to the teacher's assignment.
 
 - The teacher can see submitted handwriting, attempts and tutor feedback for assigned exercises. Unsaved/in-progress local ink is not automatically sent to the teacher. Personal notebooks are excluded from the teacher dashboard.
 - Reopening always calls the idempotent assignment start endpoint to obtain the existing problem ID and a fresh signed image URL. Saved local pages and handwriting are restored by that ID; attempt history is loaded normally.

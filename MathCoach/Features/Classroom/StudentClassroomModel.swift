@@ -11,14 +11,36 @@ final class StudentClassroomModel {
     private(set) var openingItemID: String?
     var errorMessage: String?
     var joinCode = ""
-    var selectedClassID: String?
+    private(set) var selectedClassID: String?
+    var navigationPath: [StudentClassroomRoute] = [] {
+        didSet {
+            if navigationPath != oldValue { invalidatePendingOpen() }
+        }
+    }
+    private var navigationGeneration = 0
+
+    var selectedClass: StudentClass? {
+        classes.first { $0.id == selectedClassID }
+    }
 
     var selectedAssignments: [StudentAssignment] {
         assignments.filter { $0.class_id == selectedClassID }
     }
 
     var selectedClassName: String {
-        classes.first { $0.id == selectedClassID }?.name ?? "Verkefni bekkjarins"
+        selectedClass?.name ?? "Verkefni bekkjarins"
+    }
+
+    func selectClass(_ id: String?) {
+        selectedClassID = id
+        navigationPath = []
+        invalidatePendingOpen()
+    }
+
+    private func invalidatePendingOpen() {
+        navigationGeneration += 1
+        openingItemID = nil
+        errorMessage = nil
     }
 
     func load(auth: AuthManager) async {
@@ -31,8 +53,8 @@ final class StudentClassroomModel {
             let loadedAssignments = try await auth.listStudentAssignments()
             classes = loadedClasses
             assignments = loadedAssignments
-            if !classes.contains(where: { $0.id == selectedClassID }) {
-                selectedClassID = classes.first?.id
+            if selectedClassID != nil && selectedClass == nil {
+                selectClass(nil)
             }
         } catch {
             errorMessage = error.localizedDescription
@@ -48,8 +70,11 @@ final class StudentClassroomModel {
         do {
             let classroom = try await auth.joinStudentClass(code: code)
             joinCode = ""
+            if !classes.contains(where: { $0.id == classroom.id }) {
+                classes.append(classroom)
+            }
+            selectClass(classroom.id)
             await load(auth: auth)
-            selectedClassID = classroom.id
             return true
         } catch {
             errorMessage = error.localizedDescription
@@ -58,13 +83,25 @@ final class StudentClassroomModel {
     }
 
     func open(assignment: StudentAssignment, item: StudentAssignmentItem, auth: AuthManager) async -> StudentAssignmentStartResponse? {
-        guard openingItemID == nil else { return nil }
+        guard !Task.isCancelled,
+              openingItemID == nil,
+              selectedClass?.id == assignment.class_id,
+              navigationPath.last == .assignment(assignment.id),
+              selectedAssignments.contains(where: { current in
+                  current.id == assignment.id && current.items.contains(where: { $0.id == item.id })
+              }) else { return nil }
+        let generation = navigationGeneration
         openingItemID = item.id
         errorMessage = nil
-        defer { openingItemID = nil }
+        defer {
+            if navigationGeneration == generation { openingItemID = nil }
+        }
         do {
-            return try await auth.startStudentAssignment(assignmentId: assignment.id, itemId: item.id)
+            let opened = try await auth.startStudentAssignment(assignmentId: assignment.id, itemId: item.id)
+            guard !Task.isCancelled, navigationGeneration == generation else { return nil }
+            return opened
         } catch {
+            guard !Task.isCancelled, navigationGeneration == generation else { return nil }
             errorMessage = error.localizedDescription
             return nil
         }

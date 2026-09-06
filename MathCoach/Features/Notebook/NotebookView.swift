@@ -25,6 +25,8 @@ struct NotebookView: View {
     let showImageOnboardingOnOpen: Bool
     var assignedStart: StudentAssignmentStartResponse? = nil
     var onShowClassroom: (() -> Void)? = nil
+    var classroomContext: String? = nil
+    var backButtonTitle: String = "Til baka"
 
     private var isAssigned: Bool { assignedStart != nil || problem.isAssigned }
 
@@ -91,7 +93,7 @@ struct NotebookView: View {
         .safeAreaInset(edge: .top, spacing: 0) {
             workspaceHeader(
                 title: problem.title,
-                backButtonTitle: "Til baka",
+                backButtonTitle: backButtonTitle,
                 onBack: {
                     persistAndSaveCanvasState()
                     dismiss()
@@ -1142,6 +1144,16 @@ struct NotebookView: View {
             .padding(.top, 10)
             .padding(.bottom, 12)
             .background(AppTheme.Auth.logo)
+
+            if let classroomContext {
+                Text(classroomContext)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 10)
+                    .background(AppTheme.Auth.logo)
+            }
 
             if !showImageOnboarding {
                 HStack(spacing: 12) {
