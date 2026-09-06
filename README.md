@@ -141,6 +141,11 @@ Implementation reference: `MathCoach/Core/API/Endpoint.swift`.
 3. Set `BACKEND_BASE_URL` in target Info settings if needed.
 4. Build and run on simulator/device.
 
+In the iPad simulator, click and drag with the mouse or trackpad to write on the
+canvas. Simulator builds accept touch input for walkthroughs without an Apple
+Pencil. Physical devices retain Pencil-only drawing. Open **Bekkurinn minn** to
+join a class and try an assigned exercise; the local backend must be running.
+
 CLI build example:
 
 ```bash

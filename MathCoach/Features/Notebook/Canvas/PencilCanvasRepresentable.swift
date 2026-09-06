@@ -169,7 +169,12 @@ struct PencilCanvasRepresentable: UIViewRepresentable {
         let canvasView = PKCanvasView()
         context.coordinator.canvasView = canvasView
         canvasView.drawing = drawing
+        #if targetEnvironment(simulator)
+        // Simulator mouse events are touch input; an Apple Pencil is unavailable.
+        canvasView.drawingPolicy = .anyInput
+        #else
         canvasView.drawingPolicy = .pencilOnly
+        #endif
         canvasView.alwaysBounceVertical = true
         canvasView.alwaysBounceHorizontal = true
         canvasView.bouncesZoom = true
