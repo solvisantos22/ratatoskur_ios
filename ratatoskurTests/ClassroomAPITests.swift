@@ -1,9 +1,54 @@
 import XCTest
 import PencilKit
+import UIKit
 @testable import ratatoskur
 
 @MainActor
 final class ClassroomAPITests: XCTestCase {
+    func testTeacherDisablingRevealDuringOpenNotebookPreservesInkAndStopsRetry() async throws {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [ClassroomStubURLProtocol.self]
+        let session = URLSession(configuration: configuration)
+        defer { session.invalidateAndCancel(); ClassroomStubURLProtocol.handler = nil }
+        let detail = "Kennarinn hefur slökkt á fullum lausnum í þessu verkefni."
+        var queryCount = 0
+        ClassroomStubURLProtocol.handler = { request in
+            if request.url?.path == "/auth/me" {
+                return (200, "{\"id\":\"student\",\"email\":\"student@example.com\"}")
+            }
+            XCTAssertEqual(request.url?.path, "/query")
+            queryCount += 1
+            return (403, "{\"detail\":\"\(detail)\"}")
+        }
+        let keychain = MemoryTokenStore()
+        keychain.set("student-token", for: "mathcoach.access_token")
+        let backendURL = URL(string: "https://policy-test.example/")!
+        let auth = AuthManager(api: APIClient(baseURL: backendURL, session: session), keychain: keychain)
+        await auth.bootstrap()
+        for initialPolicy in [true, nil] as [Bool?] {
+            queryCount = 0
+            let problemID = UUID().uuidString
+            let model = NotebookViewModel()
+            model.restoreNotebook(problemId: problemID, backendURL: backendURL, userID: "student", assignmentAllowReveal: initialPolicy)
+            let point = PKStrokePoint(location: CGPoint(x: 20, y: 30), timeOffset: 0, size: CGSize(width: 3, height: 3), opacity: 1, force: 1, azimuth: 0, altitude: .pi / 2)
+            model.drawing = PKDrawing(strokes: [PKStroke(ink: PKInk(.pen, color: .black), path: PKStrokePath(controlPoints: [point], creationDate: Date()))])
+            model.problemImage = UIGraphicsImageRenderer(size: CGSize(width: 100, height: 100)).image { context in
+                UIColor.white.setFill()
+                context.fill(CGRect(x: 0, y: 0, width: 100, height: 100))
+            }
+            model.selectedMode = .reveal
+            await model.submitQuery(authManager: auth, problemId: problemID, pipelineMode: nil)
+            XCTAssertEqual(queryCount, 1)
+            XCTAssertEqual(model.errorMessage, detail)
+            XCTAssertEqual(model.assignmentAllowReveal, false)
+            XCTAssertEqual(model.selectedMode, .hint)
+            XCTAssertEqual(model.drawing.strokes.first?.path.first?.location, point.location)
+            XCTAssertFalse(model.canRetryLastSubmission)
+            await model.retryLastSubmission(authManager: auth)
+            XCTAssertEqual(queryCount, 1)
+        }
+    }
+
     func testStudentRequestsUseBearerAuthAndExpectedRoutes() async throws {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [ClassroomStubURLProtocol.self]

@@ -13,8 +13,9 @@ commits and check the combined result; do not force-push or rewrite teammates'
 history. Bring relevant updates from `main` into feature branches as work proceeds.
 
 Commit and push small, checked milestones regularly, including at the end of a
-work session. Share work on feature branches while Xcode/device review is pending,
-and describe any checks still outstanding. Coordinate API changes across both
+work session. Pull incoming `main` changes, merge each checked milestone into
+`main`, and push it so teammates receive the current work. Keep outstanding
+Xcode/device checks explicit. Coordinate API changes across both
 repositories. Keep product decisions and meeting materials in Notion.
 
 ## Product Experience
@@ -147,6 +148,12 @@ xcodebuild -project ratatoskur.xcodeproj -scheme ratatoskur -destination 'generi
 ```
 
 ## Notes and Limitations
+
+- Teachers can disable full worked solutions on assigned exercises. Hints and
+  checks remain available. The notebook applies the current assignment policy
+  when opening and when returning to the app; the backend also checks every
+  request. A saved disabled Reveal selection becomes Hint while keeping its ink.
+  The existing correct-attempt requirement for Reveal still applies when allowed.
 
 - Math rendering uses MathJax from CDN (`jsdelivr`), so tutor math formatting requires network access.
 - Autosave is best-effort; write failures are intentionally non-blocking.

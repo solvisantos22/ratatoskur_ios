@@ -7,6 +7,12 @@ enum QueryMode: String, CaseIterable, Identifiable, Codable {
 
     var id: String { rawValue }
 
+    static func availableModes(assignmentAllowReveal: Bool?) -> [QueryMode] {
+        allCases.filter { assignmentAllowReveal != false || $0 != .reveal }
+    }
+
+    static let assignmentPolicyExplanation = "Kennarinn hefur slökkt á fullum lausnum í þessu verkefni. Þú getur fengið vísbendingu eða látið fara yfir lausnina."
+
     var displayName: String {
         switch self {
         case .hint:

@@ -89,6 +89,21 @@ final class NotebookViewModel: ObservableObject {
     @Published var lastFailedSubmission: FailedSubmissionContext?
 
     @Published private(set) var hasUnscopedLegacyDraft = false
+    @Published private(set) var assignmentAllowReveal: Bool?
+    var availableModes: [QueryMode] { QueryMode.availableModes(assignmentAllowReveal: assignmentAllowReveal) }
+    var assignmentPolicyExplanation: String? {
+        assignmentAllowReveal == false ? QueryMode.assignmentPolicyExplanation : nil
+    }
+
+    func applyAssignmentPolicy(_ allowReveal: Bool?, problemId: String) {
+        guard problemId == activeProblemID else { return }
+        assignmentAllowReveal = allowReveal
+        if allowReveal == false {
+            if selectedMode == .reveal { selectedMode = .hint }
+            if lastFailedSubmission?.mode == .reveal { lastFailedSubmission = nil }
+        }
+    }
+    private var activeProblemID: String?
     private var draftStore: ProblemDraftStore?
     private var autosaveTask: Task<Void, Never>?
     private var observabilityByAttemptId: [String: QueryObservability] = [:]
@@ -98,7 +113,7 @@ final class NotebookViewModel: ObservableObject {
     var canAddPage: Bool { pages.count < maxPages }
     var pageCount: Int { pages.count }
     var canRevealSolution: Bool {
-        attempts.contains { attempt in
+        assignmentAllowReveal != false && attempts.contains { attempt in
             guard let verdict = attempt.verdict?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() else {
                 return false
             }
@@ -220,6 +235,12 @@ final class NotebookViewModel: ObservableObject {
         pipelineMode: PipelineMode?,
         confirmedReading: [QueryReadingField]? = nil
     ) async {
+        guard availableModes.contains(selectedMode) else {
+            selectedMode = .hint
+            errorMessage = assignmentPolicyExplanation
+            lastFailedSubmission = nil
+            return
+        }
         isSubmitting = true
         errorMessage = nil
         response = nil
@@ -337,13 +358,19 @@ final class NotebookViewModel: ObservableObject {
             } else {
                 errorMessage = error.localizedDescription
             }
-            lastFailedSubmission = FailedSubmissionContext(
-                problemId: problemId,
-                mode: originalMode,
-                expertMode: originalExpertMode,
-                pipelineMode: pipelineMode,
-                confirmedReading: confirmedReading
-            )
+            if originalMode == .reveal,
+               case AppError.server(statusCode: 403, message: _) = error {
+                applyAssignmentPolicy(false, problemId: problemId)
+                lastFailedSubmission = nil
+            } else {
+                lastFailedSubmission = FailedSubmissionContext(
+                    problemId: problemId,
+                    mode: originalMode,
+                    expertMode: originalExpertMode,
+                    pipelineMode: pipelineMode,
+                    confirmedReading: confirmedReading
+                )
+            }
         }
     }
 
@@ -508,9 +535,12 @@ final class NotebookViewModel: ObservableObject {
         }
     }
 
-    func restoreNotebook(problemId: String, backendURL: URL, userID: String, assignedImage: UIImage? = nil) {
+    func restoreNotebook(problemId: String, backendURL: URL, userID: String, assignedImage: UIImage? = nil, assignmentAllowReveal: Bool? = nil) {
         // Bind the notebook to the server/account that opened it, including delayed autosaves.
         autosaveTask?.cancel()
+        activeProblemID = problemId
+        self.assignmentAllowReveal = assignmentAllowReveal
+        lastFailedSubmission = nil
         let store = ProblemDraftStore(backendURL: backendURL, userID: userID)
         draftStore = store
         hasUnscopedLegacyDraft = store.hasUnscopedLegacyDraft(problemId: problemId)
@@ -518,6 +548,7 @@ final class NotebookViewModel: ObservableObject {
         selectedMode = .hint
         selectedExpertMode = .off
         loadLocalDraft(problemId: problemId)
+        applyAssignmentPolicy(assignmentAllowReveal, problemId: problemId)
         if let assignedImage {
             problemImage = assignedImage
         }

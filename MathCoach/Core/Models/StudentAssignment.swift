@@ -8,4 +8,5 @@ struct StudentAssignment: Decodable, Identifiable {
     let item_count: Int
     let created_at: String
     let items: [StudentAssignmentItem]
+    var allow_reveal: Bool? = nil
 }

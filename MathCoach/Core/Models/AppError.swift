@@ -21,6 +21,9 @@ enum AppError: LocalizedError {
         case .unauthorized:
             return "Innskráning rann út. Skráðu þig inn aftur."
         case let .server(statusCode, message):
+            if statusCode == 403 {
+                return message
+            }
             if statusCode == 409 {
                 return "Þetta netfang er nú þegar skráð. Prófaðu að skrá þig inn."
             }

@@ -214,7 +214,12 @@ struct NotebookView: View {
                 viewModel.errorMessage = "Skráðu þig inn aftur til að opna stílabókina."
                 return
             }
-            viewModel.restoreNotebook(problemId: problem.id, backendURL: AppConfig.baseURL, userID: userID)
+            viewModel.restoreNotebook(
+                problemId: problem.id,
+                backendURL: AppConfig.baseURL,
+                userID: userID,
+                assignmentAllowReveal: (assignedStart?.problem ?? problem).assignment_allow_reveal
+            )
             showImageOnboarding = !isAssigned && showImageOnboardingOnOpen && viewModel.problemImage == nil
             try? await Task.sleep(for: .milliseconds(200))
             isDraftHydrated = true
@@ -258,7 +263,12 @@ struct NotebookView: View {
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase != .active {
                 persistAndSaveCanvasState()
+            } else if isDraftHydrated && isAssigned {
+                Task { await loadAssignedImage() }
             }
+        }
+        .onChange(of: problem.assignment_allow_reveal) { _, allowReveal in
+            viewModel.applyAssignmentPolicy(allowReveal, problemId: problem.id)
         }
         .onDisappear {
             submissionTask?.cancel()
@@ -294,6 +304,8 @@ struct NotebookView: View {
             guard start.problem.id == problem.id else {
                 throw AppError.message("Dæmið hefur breyst. Opnaðu það aftur úr Bekkurinn minn.")
             }
+            try Task.checkCancellation()
+            viewModel.applyAssignmentPolicy(start.problem.assignment_allow_reveal, problemId: problem.id)
             let image = try await AssignmentImageLoader.load(url: start.image_url)
             try Task.checkCancellation()
             viewModel.setProblemImage(image)
@@ -680,7 +692,14 @@ struct NotebookView: View {
             VStack(spacing: 10) {
                 actionRow(for: .hint, systemImage: "lightbulb.fill")
                 actionRow(for: .check_solution, systemImage: "checkmark.seal.fill")
-                actionRow(for: .reveal, systemImage: "text.book.closed.fill")
+                if viewModel.availableModes.contains(.reveal) {
+                    actionRow(for: .reveal, systemImage: "text.book.closed.fill")
+                }
+            }
+            if let explanation = viewModel.assignmentPolicyExplanation {
+                Label(explanation, systemImage: "person.crop.circle.badge.checkmark")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
 
 #if DEBUG
@@ -851,6 +870,9 @@ struct NotebookView: View {
         case .hint, .check_solution:
             return "Biður um staðfestingu áður en fyrirspurn er send."
         case .reveal:
+            if let explanation = viewModel.assignmentPolicyExplanation {
+                return explanation
+            }
             if viewModel.canRevealSolution {
                 return "Biður um staðfestingu áður en fyrirspurn er send."
             }

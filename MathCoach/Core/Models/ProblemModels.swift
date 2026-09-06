@@ -51,6 +51,7 @@ struct ProblemSummary: Decodable, Identifiable, Hashable {
     var assignment_id: String? = nil
     var assignment_item_id: String? = nil
     var assignment_image_url: URL? = nil
+    var assignment_allow_reveal: Bool? = nil
 
     var isAssigned: Bool { assignment_id != nil || assignment_item_id != nil }
 }
